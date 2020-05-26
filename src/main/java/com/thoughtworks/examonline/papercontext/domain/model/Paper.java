@@ -1,4 +1,4 @@
-package com.thoughtworks.examonline.papercontext.domain;
+package com.thoughtworks.examonline.papercontext.domain.model;
 
 import com.thoughtworks.examonline.common.ddd.annotation.AggregateRoot;
 import com.thoughtworks.examonline.common.ddd.annotation.Entity;
@@ -36,10 +36,10 @@ public class Paper {
                 .build();
     }
 
-    public static Paper reassemble(final PaperId paperId, final List<BlankQuiz> blankQuizzes,
+    public Paper reassemble(final List<BlankQuiz> blankQuizzes,
                             final String teacherId) {
         return Paper.builder()
-                .id(paperId)
+                .id(id)
                 .blankQuizzes(blankQuizzes)
                 .teacherId(teacherId)
                 .reassembleTime(LocalDateTime.now())
@@ -49,15 +49,16 @@ public class Paper {
     @Entity
     @Data
     @Builder
+    @AllArgsConstructor
     public static class BlankQuiz {
         private BlankQuizId id;
         private Integer score;
     }
 
     @ValueObject
-    @Data
-    @Builder
     public static class BlankQuizId extends AbstractId {
-
+        public BlankQuizId(final String value) {
+            super(value);
+        }
     }
 }

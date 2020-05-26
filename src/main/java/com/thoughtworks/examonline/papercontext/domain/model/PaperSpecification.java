@@ -1,4 +1,4 @@
-package com.thoughtworks.examonline.papercontext.domain;
+package com.thoughtworks.examonline.papercontext.domain.model;
 
 /**
  * @author gitqh

@@ -11,13 +11,13 @@ package certification-context {
             id: CertificationId
             studentName: String
             course: Course
-            generate(): Certification
+            {static} generate(): Certification
         }
         class "Course" as cc <<Value Object>> {
             courseName: String
             description: String
         }
-        Certification "1" *--> "1" cc
+        Certification "n" *--> "1" cc
     }
 }
 
@@ -26,6 +26,8 @@ package examination-context {
         class Examination <<Aggregate Root>> {
             id: ExaminationId
             paper: Paper
+            {static} create(): Examination
+            start()
         }
         class "Paper" as ep <<Value Object>> {
             name: String
@@ -46,7 +48,7 @@ package paper-context {
             id: PaperId
             blankQuizIds: List<BlankQuizId>
             teacherId: String
-            assemble(): Paper
+            {static} assemble(): Paper
             reassemble(): Paper
         }
     }
@@ -59,7 +61,7 @@ package blankquiz-context {
             teacherId: TeacherId
             createTime: LocalDateTime
             updateTime: LocalDateTime
-            create(): BlankQuiz
+            {static} create(): BlankQuiz
             update()
             delete()
         }
@@ -72,6 +74,7 @@ package answersheet-context {
             id: AnswerSheetId
             studentId: String
             score: int
+            assign()
             submit()
             handIn()
             review()

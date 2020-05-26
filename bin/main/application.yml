@@ -1,0 +1,40 @@
+spring:
+#  datasource:
+#    url: jdbc:h2:mem:parking;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS parking
+#    platform: h2
+#    usermane: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#  datasource:
+#    url: jdbc:mariadb://localhost:3306/parkinglot
+#    user: root
+#    password: root
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    validationQuery: SELECT 1
+#  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        use_sql_comments: true
+#        format_sql: true
+#  h2:
+#    console:
+#      enabled: true
+#      path: /console
+#      settings:
+#        trace: false
+#        web-allow-others: true
+#mariadb:
+#  dataDir: ./data/local
+#  port: 3306
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      exposure:
+        include: "health,env,beans,refresh,prometheus,threaddump,headdump"

@@ -11,8 +11,8 @@ import java.util.Set;
  * @author gitqh
  */
 @SuppressWarnings("checkstyle:magicnumber")
-public class BlankQuizMemRepository implements BlankQuizRepository {
-    private Set<BlankQuiz> blankQuizzes = Sets.newHashSet();
+public class MemoryBlankQuizRepository implements BlankQuizRepository {
+    private final Set<BlankQuiz> blankQuizzes = Sets.newHashSet();
 
     {
         blankQuizzes.add(BlankQuiz.builder()
@@ -39,7 +39,15 @@ public class BlankQuizMemRepository implements BlankQuizRepository {
     }
 
     @Override
-    public void delete(final String id) {
-        blankQuizzes.removeIf(e -> e.getId().getValue().equals(id));
+    public void delete(final BlankQuizId id) {
+        blankQuizzes.removeIf(e -> e.getId().equals(id));
+    }
+
+    @Override
+    public BlankQuiz find(BlankQuizId blankQuizId) {
+        return blankQuizzes.stream()
+                .filter(quiz -> quiz.getId().equals(blankQuizId))
+                .findFirst()
+                .orElseThrow(NullPointerException::new);
     }
 }

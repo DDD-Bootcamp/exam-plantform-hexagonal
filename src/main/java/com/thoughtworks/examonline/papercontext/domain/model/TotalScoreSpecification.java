@@ -1,7 +1,7 @@
-package com.thoughtworks.examonline.papercontext.domain;
+package com.thoughtworks.examonline.papercontext.domain.model;
 
 import com.thoughtworks.examonline.common.ddd.annotation.ValueObject;
-import com.thoughtworks.examonline.papercontext.domain.Paper.BlankQuiz;
+import com.thoughtworks.examonline.papercontext.domain.model.Paper.BlankQuiz;
 import lombok.AllArgsConstructor;
 
 /**

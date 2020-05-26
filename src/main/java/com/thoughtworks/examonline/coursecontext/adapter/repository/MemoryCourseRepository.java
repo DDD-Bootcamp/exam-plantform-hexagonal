@@ -5,5 +5,5 @@ import com.thoughtworks.examonline.coursecontext.domain.CourseRepository;
 /**
  * @author gitqh
  */
-public class CourseMemRepository implements CourseRepository {
+public class MemoryCourseRepository implements CourseRepository {
 }

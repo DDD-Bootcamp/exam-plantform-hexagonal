@@ -1,4 +1,4 @@
-package com.thoughtworks.examonline.papercontext.domain;
+package com.thoughtworks.examonline.papercontext.domain.model;
 
 import com.thoughtworks.examonline.common.ddd.annotation.ValueObject;
 import lombok.AllArgsConstructor;

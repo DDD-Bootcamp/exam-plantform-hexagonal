@@ -3,5 +3,5 @@ package com.thoughtworks.examonline.coursecontext.application;
 /**
  * @author gitqh
  */
-public class CourseApplication {
+public class CourseApplicationService {
 }

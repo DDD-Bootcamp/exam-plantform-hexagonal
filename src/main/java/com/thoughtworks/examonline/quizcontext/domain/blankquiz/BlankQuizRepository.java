@@ -4,5 +4,7 @@ public interface BlankQuizRepository {
 
     void save(BlankQuiz blankQuiz);
 
-    void delete(String id);
+    void delete(BlankQuizId id);
+
+    BlankQuiz find(BlankQuizId blankQuizId);
 }
