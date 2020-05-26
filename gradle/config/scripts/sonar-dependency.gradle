@@ -1,0 +1,8 @@
+task copyLombokFile(type: Sync) {
+    from configurations.compileClasspath.files.find {
+        file -> file.getName().startsWith("lombok")
+    }
+    into "$buildDir/external-libs"
+}
+
+build.dependsOn(copyLombokFile)

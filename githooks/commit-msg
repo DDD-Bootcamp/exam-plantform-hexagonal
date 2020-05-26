@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+
+regularExpression="^\s?\[\d+]\s?\[(feat|fix|refactor|doc|style|tech)\]\s?\[.+\]\s?.+"
+error_msg="提交信息首行请按照如下格式书写:\n
+[cardNumber][commitType] description\n
+1. cardNumber为Jira中story编号
+2. commitType只能是feat（新功能）、fix（修复bug）、refactor（重构）、tech（技术卡）、doc（文本修改）、style（格式修改）
+3. description 没有限制
+例如：
+[363381][feat] 创建用户对应数据对象 "
+#获取文件首行
+firstLine=`head -n1 "$1"`
+#if [[ "$firstLine" =~ $regularExpression ]]; then
+##    echo "commit success"
+##    exit 0
+##fi
+#echo "commit fail"
+#echo "$error_msg" >&2
+#exit 1
+exit 0
