@@ -1,13 +1,15 @@
 package com.thoughtworks.examonline.papercontext.adapter.repository;
 
 import com.google.common.collect.Sets;
-import com.thoughtworks.examonline.papercontext.domain.model.Paper;
-import com.thoughtworks.examonline.papercontext.domain.model.PaperId;
-import com.thoughtworks.examonline.papercontext.domain.model.PaperRepository;
-import java.time.LocalDateTime;
+import com.thoughtworks.examonline.papercontext.domain.model.paper.Paper;
+import com.thoughtworks.examonline.papercontext.domain.model.paper.PaperId;
+import com.thoughtworks.examonline.papercontext.domain.model.paper.PaperRepository;
 import java.util.Set;
+import javax.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Repository;
 
 @SuppressWarnings("checkstyle:magicnumber")
+@Repository
 public class MemoryPaperRepository implements PaperRepository {
     private final Set<Paper> papers = Sets.newHashSet();
 
@@ -15,8 +17,6 @@ public class MemoryPaperRepository implements PaperRepository {
         papers.add(Paper.builder()
                 .id(new PaperId("Paper001"))
                 .teacherId("Teacher001")
-                .assembleTime(LocalDateTime.now())
-                .reassembleTime(LocalDateTime.now())
                 .build());
     }
 
@@ -27,7 +27,6 @@ public class MemoryPaperRepository implements PaperRepository {
             papers.stream().filter(e -> e.equals(paper)).forEach(
                     o -> {
                         o.setTeacherId(paper.getTeacherId());
-                        o.setAssembleTime(LocalDateTime.now());
                     }
             );
         } else {
@@ -35,21 +34,20 @@ public class MemoryPaperRepository implements PaperRepository {
         }
     }
 
-    @Override
     public void delete(final String id) {
         papers.removeIf(e -> e.getId().getValue().equals(id));
     }
 
     @Override
-    public Paper find(PaperId id) {
+    public Paper find(final PaperId id) {
         return papers.stream()
-                .filter(paper-> paper.getId().equals(id))
+                .filter(paper -> paper.getId().equals(id))
                 .findFirst()
-                .orElseThrow(NullPointerException::new);
+                .orElseThrow(EntityNotFoundException::new);
     }
 
-    @Override
     public Set<Paper> getAll() {
         return papers;
     }
+
 }

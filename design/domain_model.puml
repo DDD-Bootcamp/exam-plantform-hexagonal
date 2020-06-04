@@ -27,7 +27,6 @@ package examination-context {
             id: ExaminationId
             paper: Paper
             {static} create(): Examination
-            start()
         }
         class "Paper" as ep <<Value Object>> {
             name: String
@@ -46,11 +45,18 @@ package paper-context {
     package paper <<Aggregate>> {
         class Paper <<Aggregate Root>> {
             id: PaperId
-            blankQuizIds: List<BlankQuizId>
-            teacherId: String
+            blankQuizzes: List<BlankQuiz>
+            createdBy: String
+            lastUpdatedBy: String
             {static} assemble(): Paper
             reassemble(): Paper
         }
+
+        class "BlankQuiz" as pbq <<Value Object>> {
+            id: blankQuizId
+            score: int
+        }
+        Paper "1" *--> "5..20" pbq
     }
 }
 
@@ -58,7 +64,12 @@ package blankquiz-context {
     package blankquiz <<Aggregate>> {
         class BlankQuiz <<Aggregate Root>> {
             id: blankQuizId
-            teacherId: TeacherId
+            teacherId: String;
+            content: String;
+            score: int;
+            referenceAnswer: String;
+            createdBy: String
+            lastUpdatedBy: String
             createTime: LocalDateTime
             updateTime: LocalDateTime
             {static} create(): BlankQuiz
@@ -87,16 +98,18 @@ package course-context {
         class Course <<Aggregate Root>> {
             id: courseId
             videoLink: String
-            examination: Examination
+            createdBy: String
+            lastUpdatedBy: String
+            examinationId: ExaminationId
             create(): Course
+            state: CourseStateEnum
             update()
             publish()
         }
 
-        class "Examination" as ce <<Entity>> {
-            id: ExaminationId
+        Course --> CourseStateEnum
+        enum CourseStateEnum {
         }
-        Course "1" *--> "1" ce
     }
 }
 

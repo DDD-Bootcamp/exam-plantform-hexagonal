@@ -11,7 +11,7 @@ import lombok.Getter;
 public class BlankQuizDto {
     private String blankQuizId;
 
-    public static BlankQuizDto from(String paperId) {
-        return new BlankQuizDto(paperId);
+    public static BlankQuizDto from(final String blankQuizId) {
+        return new BlankQuizDto(blankQuizId);
     }
 }

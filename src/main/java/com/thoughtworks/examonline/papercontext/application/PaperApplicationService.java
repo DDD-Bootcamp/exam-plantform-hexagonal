@@ -1,12 +1,12 @@
 package com.thoughtworks.examonline.papercontext.application;
 
-import com.thoughtworks.examonline.papercontext.domain.model.Paper;
-import com.thoughtworks.examonline.papercontext.domain.model.Paper.BlankQuiz;
-import com.thoughtworks.examonline.papercontext.domain.model.Paper.BlankQuizId;
-import com.thoughtworks.examonline.papercontext.domain.model.PaperId;
-import com.thoughtworks.examonline.papercontext.domain.model.PaperRepository;
+import com.thoughtworks.examonline.papercontext.adapter.api.command.AssemblePaperCommand;
+import com.thoughtworks.examonline.papercontext.domain.model.paper.IllegalQuizzesCountException;
+import com.thoughtworks.examonline.papercontext.domain.model.paper.Paper;
+import com.thoughtworks.examonline.papercontext.domain.model.paper.Paper.BlankQuiz;
+import com.thoughtworks.examonline.papercontext.domain.model.paper.PaperId;
+import com.thoughtworks.examonline.papercontext.domain.model.paper.PaperRepository;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,8 @@ import org.springframework.stereotype.Service;
 public class PaperApplicationService {
     private final PaperRepository paperRepository;
 
-    public PaperId assemblePaper(final AssemblePaperCommand command) {
+    public PaperId assemblePaper(final AssemblePaperCommand command)
+            throws IllegalQuizzesCountException {
         var blankQuizzes = blankQuizFrom(command);
         var teacherId = command.getTeacherId();
         var paper = Paper.assemble(blankQuizzes, teacherId);
@@ -27,7 +28,8 @@ public class PaperApplicationService {
         return paper.getId();
     }
 
-    public PaperId reassemblePaper(final String paperId, final AssemblePaperCommand command) {
+    public PaperId reassemblePaper(final String paperId, final AssemblePaperCommand command)
+            throws IllegalQuizzesCountException {
         var blankQuizzes = blankQuizFrom(command);
         var teacherId = command.getTeacherId();
         var paper = paperRepository.find(new PaperId(paperId));
@@ -36,13 +38,9 @@ public class PaperApplicationService {
         return newPaper.getId();
     }
 
-    private List<BlankQuiz> blankQuizFrom(AssemblePaperCommand command) {
+    private List<BlankQuiz> blankQuizFrom(final AssemblePaperCommand command) {
         return command.getQuizzes().stream()
-                .map(quiz -> new BlankQuiz(new BlankQuizId(quiz.getQuizId()), quiz.getScore()))
+                .map(quiz -> new BlankQuiz(quiz.getQuizId(), quiz.getScore()))
                 .collect(Collectors.toList());
-    }
-
-    public Set<Paper> getAll() {
-        return paperRepository.getAll();
     }
 }

@@ -11,7 +11,7 @@ import lombok.Getter;
 public class PaperDto {
     private String paperId;
 
-    public static PaperDto from(String paperId) {
+    public static PaperDto from(final String paperId) {
         return new PaperDto(paperId);
     }
 }

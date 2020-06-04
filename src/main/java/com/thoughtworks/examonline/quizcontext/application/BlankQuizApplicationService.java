@@ -1,8 +1,9 @@
 package com.thoughtworks.examonline.quizcontext.application;
 
-import com.thoughtworks.examonline.quizcontext.domain.blankquiz.BlankQuiz;
-import com.thoughtworks.examonline.quizcontext.domain.blankquiz.BlankQuizId;
-import com.thoughtworks.examonline.quizcontext.domain.blankquiz.BlankQuizRepository;
+import com.thoughtworks.examonline.quizcontext.domain.model.blankquiz.BlankQuiz;
+import com.thoughtworks.examonline.quizcontext.domain.model.blankquiz.BlankQuizId;
+import com.thoughtworks.examonline.quizcontext.domain.model.blankquiz.BlankQuizRepository;
+import com.thoughtworks.examonline.quizcontext.domain.model.blankquiz.IllegalScoreException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class BlankQuizApplicationService {
     private final BlankQuizRepository blankQuizRepository;
 
-    public BlankQuizId createQuiz(final CreateQuizCommand command) {
+    public BlankQuizId createQuiz(final CreateQuizCommand command) throws IllegalScoreException {
         var blankQuiz = BlankQuiz.create(command.getTeacherId(), command.getQuestion(),
                 command.getScore(), command.getReferenceAnswer());
         blankQuizRepository.save(blankQuiz);

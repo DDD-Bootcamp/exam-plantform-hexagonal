@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS `paper`;
+CREATE TABLE `paper` (
+   `id` char(36) NOT NULL,
+   `blank_quizzes` JSON NOT NULL,
+   `teacherId` char(36) NOT NULL,
+   `assembleTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `reassembleTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`id`)
+);
