@@ -18,13 +18,13 @@ public class PaperRepositoryImpl implements PaperRepository {
     private final JPAPaperRepository jpaPaperRepository;
 
     @Override
-    public void save(Paper paper) {
+    public void save(final Paper paper) {
         PaperPO paperPO = PaperPO.from(paper);
         Optional.ofNullable(paperPO).ifPresent(jpaPaperRepository::save);
     }
 
     @Override
-    public Paper find(PaperId id) {
+    public Paper find(final PaperId id) {
         return jpaPaperRepository.findById(id.toString())
                 .map(PaperPO::to).orElseThrow(EntityNotFoundException::new);
     }
