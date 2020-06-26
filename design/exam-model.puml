@@ -5,22 +5,6 @@ skinparam class {
     ArrowColor SeaGreen
 }
 
-package certification-context {
-    package certification <<Aggregate>> {
-        class Certification <<Aggregate Root>> {
-            id: CertificationId
-            studentName: String
-            course: Course
-            {static} generate(): Certification
-        }
-        class "Course" as cc <<Value Object>> {
-            courseName: String
-            description: String
-        }
-        Certification "1" *--> "1" cc
-    }
-}
-
 package examination-context {
     package examination <<Aggregate>> {
         class Examination <<Aggregate Root>> {
@@ -46,23 +30,24 @@ package paper-context {
     package paper <<Aggregate>> {
         class Paper <<Aggregate Root>> {
             id: PaperId
-            blankQuizIds: List<BlankQuizId>
+            blankQuizzes: List<BlankQuiz>
             teacherId: String
             {static} assemble(): Paper
             reassemble()
         }
-'        class "BlankQuiz" as ebp <<Value Object>> {
-'                    number: String
-'                    score: int
-'                }
-'                Paper "1" *--> "5..20" ebp
+
+        class "BlankQuiz" as pbq <<Value Object>> {
+                    id: String
+                    score: int
+                }
+        Paper "1" *--> "5..20" pbq
     }
 }
 
 package blankquiz-context {
     package blankquiz <<Aggregate>> {
         class BlankQuiz <<Aggregate Root>> {
-            id: blankQuizId
+            id: BlankQuizId
             teacherId: String
             content: String
             referenceAnswer: String
@@ -71,7 +56,7 @@ package blankquiz-context {
             updatedTime: LocalDateTime
             --
             {static} create(): BlankQuiz
-            update()
+            revise()
             delete()
         }
     }
@@ -82,9 +67,9 @@ package answersheet-context {
         class AnswerSheet <<Aggregate Root>> {
             id: AnswerSheetId
             studentId: String
+            examinationId: String
             score: int
-            answers: List<Answer>
-            referenceAnswers: List<ReferenceAnswer>
+            blankQuizzes: List<BlankQuiz>
             --
             {static} assign(): AnswerSheet
             submit()
@@ -92,24 +77,22 @@ package answersheet-context {
             review()
         }
 
-        class Answer <<Value Object>> {
-        number:int
-        content: String
-        }
-        class ReferenceAnswer <<Value Object>> {
-         number:int
-                content: String
+        class "BlankQuiz" as ebb <<Value Object>> {
+        number: int
+        answer: String
+        referenceAnswer：String
+        score: int
         }
 
-        AnswerSheet "1" *--> "5..20" Answer
-        AnswerSheet "1" *--> "5..20" ReferenceAnswer
+
+        AnswerSheet "1" *--> "5..20" ebb
     }
 }
 
 package course-context {
     package course <<Aggregate>> {
         class Course <<Aggregate Root>> {
-            id: courseId
+            id: CourseId
             videoLink: String
             examination: Examination
             status: CourseStatusEnum
@@ -119,88 +102,29 @@ package course-context {
             publish()
         }
 
-        class "Examination" as ce <<Entity>> {
-            id: ExaminationId
+        class "Examination" as ce <<Value Object>> {
+            id: String
+            name: String
+            description: String
         }
         Course "1" *--> "1" ce
     }
 }
 
+package certification-context {
+    package certification <<Aggregate>> {
+        class Certification <<Aggregate Root>> {
+            id: CertificationId
+            studentName: String
+            course: Course
+            {static} generate(): Certification
+        }
+        class "Course" as cc <<Value Object>> {
+            courseName: String
+            description: String
+        }
+        Certification "1" *--> "1" cc
+    }
+}
 
-
-
-' package examination {
-'     package examination <<Aggregate>> {
-'         class Examination <<Entity>> <<Aggregate Root>> {
-'             id: ExaminationId
-'             paperId: PaperId
-'             createTime: LocalDateTime
-'             startTime: LocalDateTime
-'             endTime: LocalDateTime
-'             answerSheetIds: List<AnswerSheetId>
-'         }
-
-'         interface ExaminationSpecification {
-'             isSatisfiedBy(Examination examination): boolean
-'         }
-'         UniquePaperExaminationSpecification --|> ExaminationSpecification
-'         class UniquePaperExaminationSpecification <<Value Object>> {
-'             isSatisfiedBy(Examination examination): boolean 
-'         }
-'         OverTimeExaminationSpecification --|> ExaminationSpecification
-'         class OverTimeExaminationSpecification <<Value Object>> {
-'             isSatisfiedBy(Examination examination): boolean 
-'         }
-'         Examination --up[hidden] ExaminationSpecification
-'         creatingExaminationService --up[hidden] Examination
-'     }
-' }
-
-' package paper {
-'     package paper <<Aggregate>> {
-'         class Paper <<Entity>> <<Aggregate Root>> {
-'             id: PaperId 
-'             quizToReferenceAnswerMap: Map<Quiz, ReferenceAnswer>
-'             score(AnswerSheet answerSheet): BigDecimal
-'         }
-'         Paper ..> AnswerSheet
-'         class AnswerSheet <<Value Object>> {
-'             quizToAnswerMap: Map<Quiz, Answer>
-'         }
-'         Paper --> ReferenceAnswer
-'         class ReferenceAnswer <<Value Object>>
-'         ReferenceAnswer --|> Answer
-'         Paper ..> Answer
-'         class Answer <<Value Object>> {
-'             value: String 
-'         }
-'         Paper --> Quiz
-'         class Quiz <<Value Object>> {
-'             description: String 
-'             score: Long 
-'         }
-'         Paper --up[hidden] PaperSpecification
-'         interface PaperSpecification {
-'             isSatisfiedBy(Paper paper): boolean 
-'         }
-'         QuizCountPaperSpecification --|> PaperSpecification
-'         class QuizCountPaperSpecification <<Value Object>> {
-'             isSatisfiedBy(Paper paper): boolean
-'         }
-'         TotalScorePaperSpecification --|> PaperSpecification
-'         class TotalScorePaperSpecification <<Value Object>> {
-'             isSatisfiedBy(Paper paper): boolean 
-'         }
-'         DuplicateQuizPaperSpecification --|> PaperSpecification
-'         class DuplicateQuizPaperSpecification <<Value Object>> {
-'             isSatisfiedBy(Paper paper): boolean 
-'         }
-'         class BlankQuiz <<Value Object>>
-'         class Quiz <<Value Object>> {
-'             score: Long 
-'             description: string
-'         }
-'         BlankQuiz -up-|> Quiz
-'     }
-' }
 @enduml
