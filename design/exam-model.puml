@@ -21,8 +21,8 @@ package examination-context {
             number: String
             score: int
         }
-        Examination "1" *--> "1" ep
-        ep "1" *--> "5..20" ebq
+        Examination "1" *-- "1" ep
+        ep "1" *-- "5..20" ebq
     }
 }
 
@@ -40,26 +40,24 @@ package paper-context {
                     id: String
                     score: int
                 }
-        Paper "1" *--> "5..20" pbq
+        Paper "1" *-- "5..20" pbq
     }
-}
 
-package blankquiz-context {
     package blankquiz <<Aggregate>> {
-        class BlankQuiz <<Aggregate Root>> {
-            id: BlankQuizId
-            teacherId: String
-            content: String
-            referenceAnswer: String
-            score: int
-            createdTime: LocalDateTime
-            updatedTime: LocalDateTime
-            --
-            {static} create(): BlankQuiz
-            revise()
-            delete()
+            class BlankQuiz <<Aggregate Root>> {
+                id: BlankQuizId
+                teacherId: String
+                content: String
+                referenceAnswer: String
+                score: int
+                createdTime: LocalDateTime
+                updatedTime: LocalDateTime
+                --
+                {static} create(): BlankQuiz
+                revise()
+                delete()
+            }
         }
-    }
 }
 
 package answersheet-context {
@@ -85,7 +83,7 @@ package answersheet-context {
         }
 
 
-        AnswerSheet "1" *--> "5..20" ebb
+        AnswerSheet "1" *-- "5..20" ebb
     }
 }
 
@@ -107,7 +105,7 @@ package course-context {
             name: String
             description: String
         }
-        Course "1" *--> "1" ce
+        Course "1" *-- "1" ce
     }
 }
 
@@ -123,7 +121,7 @@ package certification-context {
             courseName: String
             description: String
         }
-        Certification "1" *--> "1" cc
+        Certification "1" *-- "1" cc
     }
 }
 
